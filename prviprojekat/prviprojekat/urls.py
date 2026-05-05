@@ -18,8 +18,12 @@ from django.contrib import admin
 from django.urls import path
 from core.views import home
 from core.views import about
+from core.views import products
+from core.views import user
 
 urlpatterns = [
     path('', home),
     path('about', about),
+    path('proizvod/<str:name>', products),
+    path('korisnik/<int:user_id>', user),
 ]
