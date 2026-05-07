@@ -1,1 +1,13 @@
-<p>{{product.description}}</p>
+# kako zna sta je name
+<div>
+    
+    {%for name, product in products.items%}
+        <div>
+            <p>{{name}}</p>
+            <small>{{product.description}}</small>
+            <p>${{product.price}}</p>
+        </div>
+    {%endfor%}
+
+
+</div>

@@ -1,15 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 
-def home(request):
-    return render(request, 'index.html')
-
-def about(request):
-    return HttpResponse('Internal Server Error', status = 500)
-
-def products(request, name):
-
-    products = {
+products = {
         "Macbook Air 2025": {
             'price': 2000,
             'description': 'This is Macbook Air 2025'
@@ -31,6 +23,17 @@ def products(request, name):
             'description': 'Noise-cancelling wireless headphones'
         }
     }
+
+
+def home(request):
+    # kako zna sta je products odnosno sta je context products
+    context = {'products': products}
+    return render(request, 'index.html', context)
+
+def about(request):
+    return HttpResponse('Internal Server Error', status = 500)
+
+def product(request, name):
     # kako zna sta je name
     product = products.get(name)
     if not product:
@@ -38,7 +41,7 @@ def products(request, name):
 
     context = {'product': product}
 
-    return render(request, 'index.html', context)
+    return render(request, 'product.html', context)
     
 
 def user(request, user_id):
