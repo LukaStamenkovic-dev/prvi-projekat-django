@@ -31,11 +31,15 @@ def products(request, name):
             'description': 'Noise-cancelling wireless headphones'
         }
     }
-
-    if name in products:
-        return HttpResponse(f"This is {name}")
-    else:
+    # kako zna sta je name
+    product = products.get(name)
+    if not product:
         return HttpResponseNotFound(f"Product {name} not available")
+
+    context = {'product': product}
+
+    return render(request, 'index.html', context)
+    
 
 def user(request, user_id):
     return HttpResponse(f"This is user id: {user_id}")
