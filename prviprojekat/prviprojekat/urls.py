@@ -20,10 +20,18 @@ from core.views import home
 from core.views import about
 from core.views import product
 from core.views import user
+from core.views import create_product
+from core.views import save_product
 
 urlpatterns = [
     path('', home),
     path('about', about),
     path('proizvod/<str:name>', product),
     path('korisnik/<int:user_id>', user),
+
+    # Get
+    path('admin/proizvod/create', create_product),
+
+    # Put
+    path('admin/proizvod/save', save_product),
 ]
