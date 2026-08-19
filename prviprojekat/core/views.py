@@ -1,42 +1,21 @@
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseNotAllowed
 from django.shortcuts import render
-
-products = {
-        "Macbook Air 2025": {
-            'price': 2000,
-            'description': 'This is Macbook Air 2025'
-        },
-        "iPhone 16 Pro": {
-            'price': 1200,
-            'description': 'Latest iPhone 16 Pro with advanced camera system'
-        },
-        "Samsung Galaxy S25": {
-            'price': 1100,
-            'description': 'Flagship Samsung phone with powerful performance'
-        },
-        "Dell XPS 15": {
-            'price': 1800,
-            'description': 'High-performance laptop for professionals'
-        },
-        "Sony WH-1000XM6": {
-            'price': 400,
-            'description': 'Noise-cancelling wireless headphones'
-        }
-    }
+from .models import Product
 
 
 def home(request):
     # kako zna sta je products odnosno sta je context products
-    context = {'products': products}
+    context = {'products': Product.objects.order_by('-id')[:5]}
     return render(request, 'index.html', context)
 
 def about(request):
     return HttpResponse('Internal Server Error', status = 500)
 
 def product(request, name):
-    # kako zna sta je name
-    product = products.get(name)
-    if not product:
+
+    try:
+        product = Product.objects.get(title=name)
+    except Product.DoesNotExist:
         return HttpResponseNotFound(f"Product {name} not available")
 
     context = {'product': product}
@@ -61,5 +40,8 @@ def save_product(request):
 
     if not title or not price or not description:
         return HttpResponse("All fields are required", status = 400)
+
+    product = Product(title=title, price=price, description=description)
+    product.save()
 
     return HttpResponse(f"This is {title}, {price}, {description}", status = 201)
