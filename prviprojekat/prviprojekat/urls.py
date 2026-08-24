@@ -21,8 +21,6 @@ from core.views.general import about
 from core.views.user import user
 
 from core.views.product import product
-from core.views.product import create_product
-from core.views.product import save_product
 
 from django.contrib.auth import views as auth_views
 
@@ -32,13 +30,9 @@ urlpatterns = [
     path('proizvod/<str:name>', product),
     path('korisnik/<int:user_id>', user),
 
-    # Get
-    path('admin/proizvod/create', create_product),
+    path('login/', auth_views.LoginView.as_view(template_name="auth/login.html", next_page="/"), name="login_page"),
+    path('logout/', auth_views.LogoutView.as_view(next_page="/"), name="logout_action"),
 
-    # Put
-    path('admin/proizvod/save', save_product),
-
-    path('login/', auth_views.LoginView.as_view(template_name="auth/login.html", next_page="/")),
-    path('logout/', auth_views.LogoutView.as_view(next_page="/")),
+    path('admin/', admin.site.urls)
 
 ]
