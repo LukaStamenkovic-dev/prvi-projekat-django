@@ -1,21 +1,32 @@
-<div>
+{% extends "layout.html" %}
 
-    {% if user.is_authenticated %}
-        <p>Hello {{user.username}}</p>
-        <form action="{% url "logout_action" %}" method="POST">
-            {% csrf_token %}
-        <button type="submit">Logout</button>
-        </form>
-    {% else %}
-        <a href="{% url "login_page" %}">Login</a>
-    {% endif %}
-    
-    {%for product in products%}
-        <div>
-            <p>{{product.title}}</p>
-            <small>{{product.description}}</small>
-            <p>${{product.price}}</p>
-        </div>
-    {%endfor%}
+{% block title %}
+    Main page
+{% endblock %}
 
-</div>
+
+{% block content %}
+    <div>
+
+        {% if user.is_authenticated %}
+            <p>Hello {{user.username}}</p>
+            <form action="{% url "logout_action" %}" method="POST">
+                {% csrf_token %}
+            <button type="submit">Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url "login_page" %}">Login</a>
+        {% endif %}
+        
+        {%for product in products%}
+            <div>
+                <p>{{product.title}}</p>
+                <small>{{product.description}}</small>
+                <p>${{product.promo_price|default:product.price}}</p>
+                <img src="{{ product.image.url }}" width="250px" />
+                <a href="{% url "product_page" name=product.title %}"> Look at product </a>
+            </div>
+        {%endfor%}
+
+    </div>
+{% endblock  %}
