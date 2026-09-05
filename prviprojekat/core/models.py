@@ -1,6 +1,10 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator, MinLengthValidator
 from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
+
+from PIL import Image
+from io import BytesIO
 
 class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
@@ -54,6 +58,26 @@ class ProductImage(models.Model):
         upload_to="product/", 
         validators=[FileExtensionValidator(allowed_extensions=["jpg", "jpeg", "png", "webp"])]
         )
+
+    def save(self, *args, **kwargs):
+        if self.image:
+            img = Image.open(self.image)
+
+            if img.mode in ("RGBA", "P"):
+                img = img.convert("RGB")
+
+            max_size = (1920, 1080)
+            if img.width > max_size[0] or img.height > max_size[1]:
+                img.thumbnail(max_size, Image.LANCZOS)
+
+            buffer = BytesIO()
+            img.save(buffer, format="WEBP", quality=80)
+            buffer.seek(0)
+
+            self.image.save(f"{self.image.name.split(".")[0]}.webp", ContentFile(buffer.read()), save=False)
+
+        super().save(*args, **kwargs)
+
 
     def __str__(self):
         return f"Image for{self.product.title}"
