@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}
+
+    {{product.title}}
+
+{% endblock %}
+
+
+{% block content %}
+
+    <h1>{{product.title}}</h1>
+    <p>${{product.promo_price|default:product.price}}</p>
+    <p>{{product.description}}</p>
+
+    {% for img in product.images.all %}
+        <img width="150px" src="{{ img.image.url }}" />
+    {% endfor %}
+
+    <a href="{% url 'add_to_cart' product.id %}">
+    Add to cart
+    </a>
+
+{% endblock  %}

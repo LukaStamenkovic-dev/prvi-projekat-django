@@ -28,7 +28,7 @@ from core.views.product import product
 
 from django.contrib.auth import views as auth_views
 
-from core.views.shopping_cart import add_to_cart, show_cart
+from core.views.shopping_cart import add_to_cart, show_cart, remove_from_cart
 
 urlpatterns = [
     path('', home),
@@ -42,8 +42,9 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
 
-    path('cart/add/<int:product_id>', add_to_cart),
+    path('cart/add/<int:product_id>', add_to_cart, name="add_to_cart"),
     path('cart/show', show_cart, name="cart_details"),
+    path('cart/remove/<int:product_id>', remove_from_cart, name="remove_from_cart"),
 
     re_path(r'media/(?P<path>.*)$', serve, {
         'document_root': settings.MEDIA_ROOT

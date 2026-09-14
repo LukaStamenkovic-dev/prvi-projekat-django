@@ -31,7 +31,7 @@ class Product(models.Model):
         null=True
         )
     amount = models.PositiveIntegerField(default=0)
-    promo_price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    promo_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
  
     class Meta:
         db_table = 'product'
@@ -51,6 +51,14 @@ class Product(models.Model):
             self.image.save(f"{self.image.name.split(".")[0]}.webp", compressed, save=False)
 
         super().save(*args, **kwargs)
+
+# PItaj sta je @property itd
+    @property
+    def current_price(self):
+        if self.promo_price is not None:
+            return self.promo_price
+
+        return self.price
 
 
 # nije mi bas najjasnije treba da mi se objasni kako prikazuje ovo def str i related name malo blize da se objasni,
