@@ -17,8 +17,11 @@
         <img width="150px" src="{{ img.image.url }}" />
     {% endfor %}
 
-    <a href="{% url 'add_to_cart' product.id %}">
-    Add to cart
-    </a>
+    {% if user.is_authenticated %}
+        <a href="{% url 'add_to_cart' product.id %}">Add to cart</a>
+    {% else %}
+        <a href="{% url 'login_page' %}?next={{ request.path }}">Add to cart</a>
+    {% endif %}
+    
 
 {% endblock  %}

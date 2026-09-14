@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseNotAllowed
 from django.shortcuts import render
 from ..models import Product
-from django.contrib.auth.decorators import login_required
+
 
 def product(request, name):
 
